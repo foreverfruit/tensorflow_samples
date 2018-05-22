@@ -65,7 +65,6 @@ def forward_propagation(_x, _w, _b):
     # 输出层不用激活
     return tf.add(tf.matmul(layer_2, _w['w_out']), _b['b_out'])
 
-
 # 3.优化求解loss，更新参数
 y_ = forward_propagation(x, w, b)
 # 平均loss
@@ -76,7 +75,7 @@ result = tf.equal(tf.argmax(y_, 1), tf.argmax(y, 1))
 accuracy = tf.reduce_mean(tf.cast(result, tf.float32))
 
 # 4.训练
-epochs = 40
+epochs = 20
 batch_size = 100
 batch_count = int(minist.train.num_examples / batch_size)
 display_step = 4
