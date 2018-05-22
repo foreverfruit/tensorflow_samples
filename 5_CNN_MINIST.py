@@ -55,8 +55,11 @@ def forward_propagation(_x, _w, _b, _keepratio):
     # conv1 = tf.nn.batch_normalization(conv1, _mean, _var, 0, 1, 0.0001)
     # 激活函数，activation
     conv1 = tf.nn.relu(tf.nn.bias_add(conv1, b['b_conv1']))
+    # 推荐数据流动过程中查看shape变化情况
+    print('conv1:', conv1.shape)
     # 池化
     pool1 = tf.nn.max_pool(conv1, ksize=[1, 2, 2, 1], strides=[1, 2, 2, 1], padding='SAME')
+    print('pool1:', pool1.shape)
     # 失活，dropout
     out_conv1 = tf.nn.dropout(pool1, _keepratio)
 
@@ -66,20 +69,25 @@ def forward_propagation(_x, _w, _b, _keepratio):
     # conv1 = tf.nn.batch_normalization(conv1, _mean, _var, 0, 1, 0.0001)
     # 激活函数，activation
     conv2 = tf.nn.relu(tf.nn.bias_add(conv2, b['b_conv2']))
+    print('conv2:', conv2.shape)
     # 池化
     pool2 = tf.nn.max_pool(conv2, ksize=[1, 2, 2, 1], strides=[1, 2, 2, 1], padding='SAME')
+    print('pool2:', pool2.shape)
     # 失活，dropout
     out_conv2 = tf.nn.dropout(pool2, _keepratio)
 
     # 4.向量化，之后的全连接的输入应该是一个样本的特征向量
     feature_vector = tf.reshape(out_conv2, [-1, _w['w_fc1'].get_shape().as_list()[0]])
+    print('feature_vector:', feature_vector.shape)
 
     # 5.第一个 full connected layer，特征向量降维
     fc1 = tf.nn.relu(tf.add(tf.matmul(feature_vector, _w['w_fc1']), _b['b_fc1']))
     fc1_do = tf.nn.dropout(fc1, _keepratio)
+    print('fc1:', fc1.shape)
 
     # 6.第二个 full connected layer，分类器
     out = tf.add(tf.matmul(fc1_do, _w['w_fc2']), _b['b_fc2'])
+    print('fc2:', out.shape)
     return out
 
 
@@ -107,7 +115,7 @@ display_step = 1
 # 本人是cpu版本tensorflow，全部样本训练太慢，这里选用部分数据，且batch_size也较小
 batch_size = 20
 batch_count = 100
-#batch_count = int(minist.train.num_examples / batch_size)
+# batch_count = int(minist.train.num_examples / batch_size)
 
 for epoch in range(epochs):
     avg_cost = 0.
