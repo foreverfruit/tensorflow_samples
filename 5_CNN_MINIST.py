@@ -113,9 +113,9 @@ sess.run(init)
 epochs = 10
 display_step = 1
 # 本人是cpu版本tensorflow，全部样本训练太慢，这里选用部分数据，且batch_size也较小
-batch_size = 20
-batch_count = 100
-# batch_count = int(minist.train.num_examples / batch_size)
+batch_size = 100
+# batch_count = 100
+batch_count = int(minist.train.num_examples / batch_size)
 
 for epoch in range(epochs):
     avg_cost = 0.
@@ -129,7 +129,9 @@ for epoch in range(epochs):
 
     if epoch % display_step == display_step - 1:
         feed_train = {x: batch_x, y: batch_y, keepratio: 0.6}
-        feed_test = {x: test_x, y: test_y, keepratio: 0.6}
+        # 改成tensorflow-gpu版本后这里一次test所有测试集会显存溢出。简单起见，这里只用前200个测试数据
+        # feed_test = {x: test_x, y: test_y, keepratio: 1}
+        feed_test = {x: test_x[:200], y: test_y[:200], keepratio: 1}
         ac_train = sess.run(accuracy, feed_dict=feed_train)
         ac_test = sess.run(accuracy, feed_dict=feed_test)
         print('Epoch: %03d/%03d cost: %.5f train_accuray:%0.5f test_accuray:%0.5f' % (

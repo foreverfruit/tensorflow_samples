@@ -75,7 +75,7 @@ result = tf.equal(tf.argmax(y_, 1), tf.argmax(y, 1))
 accuracy = tf.reduce_mean(tf.cast(result, tf.float32))
 
 # 4.训练
-epochs = 20
+epochs = 40
 batch_size = 100
 batch_count = int(minist.train.num_examples / batch_size)
 display_step = 4
