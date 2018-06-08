@@ -3,3 +3,4 @@ data/
 __pycache__/
 model/
 .ipynb_checkpoints/
+/gesture
